@@ -1,4 +1,3 @@
-const { trusted } = require("mongoose");
 const ClimateData = require("../models/climate-data");
 
 exports.addClimateData = async (req, res) => {
@@ -31,11 +30,14 @@ exports.addClimateData = async (req, res) => {
 exports.getAll = async (req, res) => {
     try {
         const data = await ClimateData.find();
+        if (data.length == 0) {
+            throw ({ message: "No data found!" });
+        }
         res.json(data); // Data: Array of objects (documents)
     } catch (err) {
         res.status(500).json({
             success: false,
-            error: "Something went wrong"
+            error: err.message
         });
     }
 };
